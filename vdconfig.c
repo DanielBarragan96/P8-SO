@@ -22,9 +22,18 @@ vdread()
 
 }
 
-vdwrite()
+int vdwrite(int fd, char *buffer, int bytes)
 {
-
+  int currblock, currinode, cont =0, sector, i, result;
+  unsigned shot *currptr;
+  
+  //Si no está abierto, regresa error
+  if(openfiles[fd].inuse == 0)
+    return (-1);
+  
+  currinode = openfiles[fd].inode;
+  
+  //Copiar byte por byte 
 }
 
 vdclose()
