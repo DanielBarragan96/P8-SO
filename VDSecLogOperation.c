@@ -1,20 +1,16 @@
-
-
+#include "VDSecLogOperation.h"
 
 //////////////////////////////////////////////////////
-//													//
-// Lectura y escritura de sectores lógicos			//
-//													//
+//						//
+// Lectura y escritura de sectores lógicos	//
+//						//
 //////////////////////////////////////////////////////
-vdreadseclog(int unidad_lógica_o_partición,int sectorlog,char *buffer)
+int vdreadseclog(int unidad_logica_o_particion,int sectorlog,char *buffer)
 {
-
+	return 1;
 }
 
-vdwriteseclog(int unidad_lógica_o_partición,int sectorlog,char *buffer)
+int vdwriteseclog(int unidad_logica_o_particion,int sectorlog,char *buffer)
 {
-
+	return 1;
 }
-
-
-

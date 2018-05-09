@@ -39,7 +39,7 @@ int setninode(int num, char *filename,unsigned short atribs, int uid, int gid)
 	// Para propósitos de la práctica, los datos que se 
 	// refieren a dueño, grupo dueño y atributos (permisos)
 	// no son relevantes.
-inode[num].uid=uid;
+	inode[num].uid=uid;
 	inode[num].gid=gid;
 	inode[num].perms=atribs;
 
