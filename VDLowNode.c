@@ -1,5 +1,5 @@
 
-
+#include "VDLowNode.h"
 
 // Escribir en la tabla de nodos-I del directorio raíz, los datos de un archivo
 int setninode(int num, char *filename,unsigned short atribs, int uid, int gid)
@@ -154,8 +154,3 @@ int removeinode(int numinode)
 	unassigninode(numinode);
 	return(1);
 }
-
-
-
-
-

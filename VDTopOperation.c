@@ -1,4 +1,4 @@
-
+#include "VDTopOperation.h"
 
 int vdopen(char *filename,unsigned short mode)
 {
@@ -30,9 +30,9 @@ int vdcreat(char *filename,unsigned short perms)
 	{
 		// Buscar un inodo en blanco en el mapa de bits (nodos i)
 		numinode=nextfreeinode(); // Recorrer la tabla 
-									// de nodos i buscando
-									// un inodo que esté
-									// libre
+				// de nodos i buscando
+				// un inodo que esté
+				// libre
 		if(numinode==-1) // La tabla de nodos-i está llena
 		{
 			return(-1); // No hay espacio para más archivos
@@ -231,4 +231,3 @@ int vdunlink(char *filename)
 
 	removeinode(numinode);
 }
-

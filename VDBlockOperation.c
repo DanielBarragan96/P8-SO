@@ -1,3 +1,6 @@
+
+#include "VDBlockOperation.h"
+
 // **********************************************************************************
 // Lectura y escritura de bloques
 // **********************************************************************************
@@ -55,3 +58,4 @@ int readblock(int block,char *buffer)
 		vdreadseclog(inicio_area_datos+(block-1)*secboot.sec_x_bloque+i,buffer+512*i);
 	return(1);	
 }
+

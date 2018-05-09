@@ -1,7 +1,5 @@
 
-
-
-
+#include "VDNodeOperation.h"
 
 // *************************************************************************
 // Para el mapa de bits del área de nodos i
@@ -315,5 +313,3 @@ int unassignblock(int block)
 	//	vdwriteseclog(mapa_bits_bloques+i,blocksmap+i*512);
 	return(1);
 }
-
-
