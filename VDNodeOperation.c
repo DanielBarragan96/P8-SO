@@ -122,7 +122,7 @@ int assigninode(int inode)
 	}
 
 	inodesmap[offset]|=(1<<shift); // Poner en 1 el bit indicado
-	vdwriteseclog(mapa_bits_nodos_i,inodesmap);
+	vdwriteseclog(0,mapa_bits_nodos_i,inodesmap);
 	return(1);
 }
 
@@ -319,6 +319,7 @@ int unassignblock(int block)
 	// Escribir el sector en disco
 	sector=(offset/512);
 	vdwriteseclog(0, mapa_bits_bloques+sector,blocksmap+sector*512);
+	result = vdwriteseclog(0, sl_datos+block-1, empty);
 	// for(i=0;i<secboot.sec_mapa_bits_bloques;i++)
 	//	vdwriteseclog(mapa_bits_bloques+i,blocksmap+i*512);
 	return(1);
