@@ -45,7 +45,7 @@ int vdcreat(char *filename,unsigned short perms)
 // En un inodo de la tabla, escribe los datos del archivo
 	setninode(numinode,filename,perms,getuid(),getgid());
 		
-	// assigninode(numinode);
+	assigninode(numinode);
 
 	// Poner el archivo en la tabla de archivos abiertos
 	// Establecer el archivo como abierto
@@ -53,7 +53,7 @@ int vdcreat(char *filename,unsigned short perms)
 	{
 		// La primera vez que abrimos un archivo, necesitamos
 		// inicializar la tabla de archivos abiertos
-		for(i=3;i<16;i++)
+		for(i=0;i<24;i++)
 		{
 			openfiles[i].inuse=0;
 			openfiles[i].currbloqueenmemoria=-1;
@@ -63,11 +63,11 @@ int vdcreat(char *filename,unsigned short perms)
 
 	// Buscar si hay lugar en la tabla de archivos abiertos
 	// Si no hay lugar, regresa -1
-	i=3;
-	while(openfiles[i].inuse && i<16)
+	i=0;
+	while(openfiles[i].inuse && i<24)
 		i++;
 
-	if(i>=16)		// Llegamos al final y no hay lugar
+	if(i>=24)		// Llegamos al final y no hay lugar
 		return(-1);
 
 	openfiles[i].inuse=1;	// Poner el archivo en uso
@@ -120,7 +120,7 @@ int vdwrite(int fd, char *buffer, int bytes)
 			// Escribir el sector de la tabla de nodos i
 			// En el disco
 			sector=(currinode/8);
-			result=vdwriteseclog(inicio_nodos_i+sector,&inode[sector*8]);
+			result=vdwriteseclog(0,inicio_nodos_i+sector,&inode[sector*8]);
 		}
 
 		// Si el bloque de la posición actual no está en memoria
@@ -152,6 +152,9 @@ int vdwrite(int fd, char *buffer, int bytes)
 		if(openfiles[fd].currpos%TAMBLOQUE==0)
 			writeblock(currblock,openfiles[fd].buffer);
 	}
+	if(openfiles[fd].currpos%TAMBLOQUE!=0)
+		writeblock(currblock, openfiles[fd].buffer);
+		
 	return(cont);
 }
 
@@ -182,8 +185,8 @@ int vdseek(int fd, int offset, int whence)
 	{
 
 		// Validar si no estás quieriendo mover antes del
-		// inicio del archivo o después del final		if(openfiles[fd].currpos+offset>inode[openfiles[fd].inode].size ||
-		   openfiles[fd].currpos+offset<0)
+		// inicio del archivo o después del final		
+		if(openfiles[fd].currpos+offset>inode[openfiles[fd].inode].size || openfiles[fd].currpos+offset<0)
 			return(-1);
 		openfiles[fd].currpos+=offset;
 
@@ -230,4 +233,9 @@ int vdunlink(char *filename)
 		return(-1); // No existe
 
 	removeinode(numinode);
+	
+	inode[numinode] = emptyinode; // = &emptynode[0]
+	
+	for(i=0;i<sbp.sec_tabla_nodos_i;i++){
+		vdwriteseclog(0, sl_nodosi+i,&inode[i*8]);
 }
