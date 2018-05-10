@@ -1,6 +1,8 @@
 
 #include "VDLowNode.h"
 
+const int TOTAL_NODOS_I = secboot.sec_tabla_nodos_i*8;
+
 // Escribir en la tabla de nodos-I del directorio raíz, los datos de un archivo
 int setninode(int num, char *filename,unsigned short atribs, int uid, int gid)
 {
