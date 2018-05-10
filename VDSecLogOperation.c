@@ -1,5 +1,7 @@
 #include "VDSecLogOperation.h"
 
+#include "DataTypeDefinitions.h"
+
 //////////////////////////////////////////////////////
 //						//
 // Lectura y escritura de sectores lógicos	//

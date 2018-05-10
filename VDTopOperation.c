@@ -1,5 +1,7 @@
 #include "VDTopOperation.h"
 
+#include "DataTypeDefinitions.h"
+
 int vdopen(char *filename,unsigned short mode)
 {
 	// Les toca hacerla a ustedes

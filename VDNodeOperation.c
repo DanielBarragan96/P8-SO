@@ -3,17 +3,18 @@
 #include "vdisk.h"
 #include "VDBlockOperation.h"
 #include "VDSecLogOperation.h"
+
 #include "DataTypeDefinitions.h"
 
 // *************************************************************************
 // Para el mapa de bits del área de nodos i
 // *************************************************************************
 
-extern int secboot_en_memoria;
-extern SECBOOTPART secboot;
+//extern int secboot_en_memoria;
+//extern SECBOOTPART secboot;
 
-int mapa_bits_nodos_i = 0;
-int inodesmap_en_memoria = 0;
+//int mapa_bits_nodos_i = 0;
+//int inodesmap_en_memoria = 0;
 
 // Usando el mapa de bits, determinar si un nodo i, está libre u ocupado.
 int isinodefree(int inode)

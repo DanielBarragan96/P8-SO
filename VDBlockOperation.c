@@ -1,16 +1,17 @@
 
 #include "VDBlockOperation.h"
 #include "VDSecLogOperation.h"
+
 #include "DataTypeDefinitions.h"
 
 // **********************************************************************************
 // Lectura y escritura de bloques
 // **********************************************************************************
 
-int secboot_en_memoria = 0;
-int inicio_area_datos =0;
+//int secboot_en_memoria = 0;
+//int inicio_area_datos =0;
 
-SECBOOTPART secboot;
+//SECBOOTPART secboot;
 
 int writeblock(int block,char *buffer)
 {
