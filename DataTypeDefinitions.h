@@ -78,3 +78,5 @@ int TAMBLOQUE;
 char inodesmap[512] = {0};
 char blocksmap[3072] = {0};
 int openfiles_inicializada = 0;
+
+int TOTAL_NODOS_I = secboot.sec_tabla_nodos_i*8;
