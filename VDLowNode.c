@@ -99,10 +99,10 @@ int searchinode(char *filename)
 	// Recorrer la tabla de nodos I que ya tengo en memoria
 // desde el principio hasta el final buscando el archivo.
 	i=0;
-	while(strcmp(inode[i].name,filename) && i<TOTAL_NODOS_I)
+	while(strcmp(inode[i].name,filename) && i<(secboot.sec_tabla_nodos_i*8))
 		i++;
 
-	if(i>= TOTAL_NODOS_I)
+	if(i>= (secboot.sec_tabla_nodos_i*8))
 		return(-1);		// No se encuentra el archivo
 	else
 		return(i);		// La posición donde fue encontrado 

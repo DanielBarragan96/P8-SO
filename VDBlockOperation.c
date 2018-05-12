@@ -10,7 +10,6 @@
 
 //int secboot_en_memoria = 0;
 //int inicio_area_datos =0;
-
 //SECBOOTPART secboot;
 
 int writeblock(int block,char *buffer)
