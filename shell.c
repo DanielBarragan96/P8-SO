@@ -7,11 +7,27 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include "DataTypeDefinitions.h"
+
+typedef DIR VDDIR;
+typedef struct dirent vddirent;
+
 #define MAXLEN 80
 #define BUFFERSIZE 512
 
-void locateend(char *cmd);
-int executecmd(char *cmd);
+//gcc -o shellvd  shell.c vdisk.o
+
+void locateend(char *linea);
+int executecmd(char *linea);
+int isinvd(char *arg);
+int copyuu(char *arg1,char *arg2);
+int copyuv(char *arg1,char *arg2);
+int copyvu(char *arg1,char *arg2);
+int copyvv(char *arg1,char *arg2);
+int catv(char *arg1);
+int catu(char *arg1);
+int diru(char *arg1);
+int dirv(char *dir);
 
 int main()
 {
@@ -227,6 +243,20 @@ int catu(char *arg1)
 	return(1);		
 }
 
+VDDIR* vdopendir(char* args)
+{
+	return opendir(args);	
+}
+
+void vdclosedir(char* args)
+{
+	closedir(args);	
+}
+
+VDDIR* vdreaddir(char* args)
+{
+	return readdir(args);	
+}
 
 /* Muestra el directorio en el sistema de archivosd de UNIX */
 
@@ -258,11 +288,14 @@ int diru(char *arg1)
 int dirv(char *dir)
 {
 	VDDIR *dd;	
-	struct vddirent *entry;
+	vddirent *entry;
 
 	printf("Directorio del disco virtual\n");
 
-	dd=vdopendir(".");
+	if(dir==NULL)
+		dir = ".";
+		
+	dd=vdopendir(dir);
 	if(dd==NULL)
 	{
 		fprintf(stderr,"Error al abrir directorio\n");

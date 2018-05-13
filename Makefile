@@ -5,7 +5,10 @@ all:
 	gcc -c VDNodeOperation.c
 	gcc -c VDLowNode.c
 	gcc -c VDTopOperation.c
-	gcc -o format format.c vdisk.o
+	gcc -o vdformat format.c vdisk.o
+	gcc -o shellvd  shell.c vdisk.o
+	
+	
 
 clean:
 	-f dumpsec
@@ -14,4 +17,5 @@ clean:
 	-f VDNodeOperation
 	-f VDLowNode
 	-f VDTopOperation
-	-f format
+	-f vdformat
+	-f shellvd
