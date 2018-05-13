@@ -8,17 +8,118 @@
 
 int vdopen(char *filename,unsigned short mode)
 {
-	// Les toca hacerla a ustedes
+	int numinode;
+	int i;
+	
+	// Poner el archivo en la tabla de archivos abiertos
+	// Establecer el archivo como abierto
+	if(!openfiles_inicializada)
+	{
+		// La primera vez que abrimos un archivo, necesitamos
+		// inicializar la tabla de archivos abiertos
+		for(i=0;i<24;i++)
+		{
+			openfiles[i].inuse=0;
+			openfiles[i].currbloqueenmemoria=-1;
+		}
+		openfiles_inicializada=1;
+	}
+	
+	numinode=searchinode(filename);
+	
+	i=0;
+	while(openfiles[i].inuse && i<24)
+		i++;
+
+	if(i>=24)		// Llegamos al final y no hay lugar
+		return(-1);
+
+	openfiles[i].inuse=1;	// Poner el archivo en uso
+	openfiles[i].inode=numinode;  // Indicar que inodo es el
+							// del archivo abierto
+	openfiles[i].currpos=0; // Y la posición inicial
+							// del archivo es 0
+	
+	return(i);
 }
 
 int vdread(int fd, char *buffer, int bytes)
-{
-	// Ustedes la hacen
+{//return: -1 -> error; 1 -> todo bien; 2 -> ya no hay bloques
+	int currblock;
+	int currinode;
+	int cont=0;
+	int sector;
+	int i,j;
+	int result;
+	unsigned short *currptr;
+	
+	//update();
+	
+	// Si no está abierto, regresa error
+	if(openfiles[fd].inuse==0)
+		return(-1);
+
+	currinode=openfiles[fd].inode;
+	
+	// Copiar byte por byte del buffer que recibo como 
+	// argumento al buffer del archivo
+	while(cont<bytes)
+	{
+		// Obtener la dirección de donde está el bloque que corresponde
+		// a la posición actual
+		currptr=currpostoptr(fd);
+		if(currptr==NULL)
+			return(-1);
+	
+		// Cuál es el bloque en el que escibiríamos
+		currblock=*currptr;
+
+		// Si el bloque está en blanco, se regresa
+		if(currblock==0)
+		{
+			return(0);
+		}
+		/*
+		for(j = 0; j < 10; j++){
+			if(inode[currinode].blocks[j] == currblock)
+				break;
+			return(0);
+		}
+		*/
+		// Si el bloque de la posición actual no está en memoria
+		// Lee el bloque al buffer del archivo
+		if(openfiles[fd].currbloqueenmemoria!=currblock)
+		{
+			// Leer el bloque actual hacia el buffer que
+			// está en la tabla de archivos abiertos
+			readblock(currblock,openfiles[fd].buffer);			
+			// Actualizar en la tabla de archivps abiertos
+			// el bloque actual
+			openfiles[fd].currbloqueenmemoria=currblock;
+		}
+
+		// Copia el caracter al buffer
+		buffer[cont]=openfiles[fd].buffer[openfiles[fd].currpos%TAMBLOQUE];
+
+		// Incrementa posición actual del actual
+		openfiles[fd].currpos++;
+
+		// Incrementa el contador
+		cont++;
+	}
+	
+	return(cont);
 }
 
 int vdclose(int fd)
 {
-	// Ustedes la hacen
+	if(fd < 0 || fd > 23)
+		return(-1);
+	
+	openfiles[fd].inuse=-1;	// Poner el archivo en uso
+	openfiles[fd].inode=NULL;  // Indicar que inodo es el
+	
+	return(1);
 }
 
 
@@ -167,6 +268,7 @@ int vdwrite(int fd, char *buffer, int bytes)
 int vdseek(int fd, int offset, int whence)
 {
 	unsigned short oldblock,newblock;
+	short* temp;
 
 	// Si no está abierto regresa error
 	if(openfiles[fd].inuse==0)
@@ -177,7 +279,8 @@ int vdseek(int fd, int offset, int whence)
 // me regresa la dirección de memoria en el nodo i o en 
 	// en el bloque de apuntadores que contiene el bloque
 	// donde está el puntero del archivo
-	oldblock=*currpostoptr(fd);
+	temp = (currpostoptr(fd));
+	oldblock = *temp;
 		
 	if(whence==0) // A partir del inicio
 	{
@@ -208,7 +311,8 @@ int vdseek(int fd, int offset, int whence)
 	// Verificamos si la nueva posición del puntero es un
 	// bloque diferente al que estábamos,si es así hay que
 	// cargar ese bloque a memoria
-	newblock=*currpostoptr(fd);
+	temp = currpostoptr(fd);
+	newblock = *temp;
 	
 	// Después de mover el puntero, ahora me cambié a otro
 	// bloque?

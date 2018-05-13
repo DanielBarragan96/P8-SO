@@ -26,3 +26,7 @@ int assignblock(int block);
 
 // Poner en 0 el bit que corresponde a un bloque en el mapa de bits, esto equivale a decir que el bloque está libre
 int unassignblock(int block);
+
+unsigned short *postoptr(int fd,int pos);
+
+short* currpostoptr(int fd);
