@@ -6,7 +6,7 @@ all:
 	gcc -c VDLowNode.c
 	gcc -c VDTopOperation.c
 	gcc -o vdformat format.c vdisk.o
-	gcc -o shellvd  shell.c vdisk.o
+	gcc -o shellvd shell.c vdisk.o
 	
 	
 

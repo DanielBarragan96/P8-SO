@@ -1,9 +1,9 @@
+
 int vdopen(char *filename,unsigned short mode); //ustedes
 
 int vdread(int fd, char *buffer, int bytes); //ustedes
 
 int vdclose(int fd); //ustedes
-
 
 // Esta función se va a usar para crear una función en el 
 // sistema de archivos

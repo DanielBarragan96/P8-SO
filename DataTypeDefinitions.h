@@ -8,7 +8,7 @@
 #include "VDNodeOperation.h"
 #include "VDBlockOperation.h"
 #include "VDSecLogOperation.h"
-#include "VDTopOperation.h"
+
 #include "VDLowNode.h"
 
 typedef struct {

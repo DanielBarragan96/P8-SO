@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include "VDTopOperation.h"
 #include "DataTypeDefinitions.h"
 
 typedef DIR VDDIR;
