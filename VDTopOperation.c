@@ -1,6 +1,10 @@
 #include "VDTopOperation.h"
 
 #include "DataTypeDefinitions.h"
+#include "VDLowNode.h"
+#include "VDNodeOperation.h"
+#include "VDSecLogOperation.h"
+#include "VDBlockOperation.h"
 
 int vdopen(char *filename,unsigned short mode)
 {
@@ -238,6 +242,8 @@ int vdunlink(char *filename)
 	
 	inode[numinode] = emptyinode; // = &emptynode[0]
 	
-	for(i=0;i<sbp.sec_tabla_nodos_i;i++){
+	for(i=0;i<secboot.sec_tabla_nodos_i;i++){
 		vdwriteseclog(0, sl_nodosi+i,&inode[i*8]);
+		}
 }
+

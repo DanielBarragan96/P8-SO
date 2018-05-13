@@ -16,3 +16,4 @@ int vdwriteseclog(int unidad_logica_o_particion,int sectorlog,char *buffer)
 {
 	return 1;
 }
+

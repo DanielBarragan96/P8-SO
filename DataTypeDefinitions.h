@@ -1,3 +1,16 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <time.h>
+
+#include "VDNodeOperation.h"
+#include "VDBlockOperation.h"
+#include "VDSecLogOperation.h"
+#include "VDTopOperation.h"
+#include "VDLowNode.h"
+
 typedef struct {
 	int year;
 	int month;
@@ -14,7 +27,7 @@ typedef struct {
 	int currbloqueenmemoria;
 	char buffer[1024];
 	unsigned short buffindirect[512]; //		
-} OPENFILES;
+}OPENFILES;
 
 typedef struct {
 	char drive_status;	
@@ -90,6 +103,104 @@ int mapa_bits_nodos_i;
 int inodesmap_en_memoria;
 int mapa_bits_nodos_i;
 int sec_mapa_bits_bloques;
+int nodos_i_en_memoria;
+int inicio_nodos_i;
  //int TOTAL_NODOS_I = secboot.sec_tabla_nodos_i*8;
 
+unsigned int datetoint(DATE date) //[YA QUEDO]
+{
+	unsigned int val=0;
 
+	val=date.year-1970;
+	val<<=4;
+	val|=date.month;
+	val<<=5;
+	val|=date.day;
+	val<<=5;
+	val|=date.hour;
+	val<<=6;
+	val|=date.min;
+	val<<=6;
+	val|=date.sec;
+	
+	return(val);
+}
+
+int inttodate(DATE *date,unsigned int val)
+{
+	date->sec=val&0x3F;
+	val>>=6;
+	date->min=val&0x3F;
+	val>>=6;
+	date->hour=val&0x1F;
+	val>>=5;
+	date->day=val&0x1F;
+	val>>=5;
+	date->month=val&0x0F;
+	val>>=4;
+	date->year=(val&0x3F) + 1970;
+	return(1);
+}
+
+int currdatetimetoint()
+{
+	struct tm *tm_ptr;
+	time_t the_time;
+	
+	DATE now;
+
+	// Llamada al sistema para obtener la fecha/hora actual
+	// y guardar el resultado en the_time
+	(void) time(&the_time);
+	tm_ptr=gmtime(&the_time);
+
+	// Poner la fecha y hora obtenida en la estructura TIME
+	now.year=tm_ptr->tm_year-70;
+	now.month=tm_ptr->tm_mon+1;
+	now.day=tm_ptr->tm_mday;
+	now.hour=tm_ptr->tm_hour;
+	now.min=tm_ptr->tm_min;
+	now.sec=tm_ptr->tm_sec;
+	// Convertirlo a un entero de 32 bits y regresar el 
+// resultado
+	return(datetoint(now));
+}
+
+unsigned short *postoptr(int fd,int pos)
+{
+	int currinode;
+	unsigned short *currptr;
+	unsigned short indirect1;
+
+	currinode=openfiles[fd].inode;
+
+	// Está en los primeros 10 K
+	if((pos/1024)<10)
+		// Está entre los 10 apuntadores directos
+		currptr=&inode[currinode].blocks[pos/1024];
+	else if((pos/1024)<522)
+	{
+		// Si el indirecto está vacío, asígnale un bloque
+		if(inode[currinode].indirect==0)
+		{
+			// El primer bloque disponible
+			indirect1=nextfreeblock();
+			assignblock(indirect1); // Asígnalo
+			inode[currinode].indirect=indirect1;
+		} 
+		currptr=&openfiles[fd].buffindirect[pos/1024-10];
+	}
+	else
+		return(NULL);
+
+	return(currptr);
+}
+
+short* currpostoptr(int fd)
+{
+	unsigned short *currptr;
+
+	currptr=postoptr(fd,openfiles[fd].currpos);
+
+	return(currptr);
+}

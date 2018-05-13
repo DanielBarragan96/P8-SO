@@ -2,12 +2,15 @@
 #include "VDLowNode.h"
 
 #include "DataTypeDefinitions.h"
+#include "VDSecLogOperation.h"
+#include "VDNodeOperation.h"
+#include "VDBlockOperation.h"
+#include "string.h"
 
 // Escribir en la tabla de nodos-I del directorio raíz, los datos de un archivo
 int setninode(int num, char *filename,unsigned short atribs, int uid, int gid)
 {
 	int i;
-
 	int result;
 
 //	Antes de continuar debe cargarse en memoria el sector de boot de la partición.
@@ -21,7 +24,7 @@ int setninode(int num, char *filename,unsigned short atribs, int uid, int gid)
 	if(!nodos_i_en_memoria)
 	{
 		for(i=0;i<secboot.sec_tabla_nodos_i;i++)
-			result=vdreadseclog(inicio_nodos_i+i,&inode[i*4]);
+			result=vdreadseclog(0,inicio_nodos_i+i,&inode[i*4]);
 
 		nodos_i_en_memoria=1;
 	}
@@ -59,9 +62,9 @@ int setninode(int num, char *filename,unsigned short atribs, int uid, int gid)
 	// Optimizar la escritura escribiendo solo el sector lógico que
 	// corresponde al inodo que estamos asignando.
 	// i=num/8;
-	// result=vdwriteseclog(inicio_nodos_i+i,&inode[i*8]);
+	// result=vdwriteseclog(0, inicio_nodos_i+i,&inode[i*8]);
 	for(i=0;i<secboot.sec_tabla_nodos_i;i++)
-		result=vdwriteseclog(inicio_nodos_i+i,&inode[i*8]);
+		result=vdwriteseclog(0, inicio_nodos_i+i,&inode[i*8]);
 
 	return(num);
 }
@@ -87,7 +90,7 @@ int searchinode(char *filename)
 	if(!nodos_i_en_memoria)
 	{
 		for(i=0;i<secboot.sec_tabla_nodos_i;i++)
-			result=vdreadseclog(inicio_nodos_i+i,&inode[i*4]);
+			result=vdreadseclog(0, inicio_nodos_i+i,&inode[i*4]);
 
 		nodos_i_en_memoria=1;
 	}
