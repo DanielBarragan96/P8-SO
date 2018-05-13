@@ -1,10 +1,6 @@
 #include "VDTopOperation.h"
-
 #include "DataTypeDefinitions.h"
-#include "VDLowNode.h"
-#include "VDNodeOperation.h"
-#include "VDSecLogOperation.h"
-#include "VDBlockOperation.h"
+
 
 int vdopen(char *filename,unsigned short mode)
 {

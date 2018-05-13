@@ -1,4 +1,7 @@
+#ifndef DATATYPEDEFINITIONS_H
+#define DATATYPEDEFINITIONS_H
 
+#pragma pack(1)
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -8,8 +11,8 @@
 #include "VDNodeOperation.h"
 #include "VDBlockOperation.h"
 #include "VDSecLogOperation.h"
-
 #include "VDLowNode.h"
+#include "vdisk.h"
 
 typedef struct {
 	int year;
@@ -171,4 +174,4 @@ int currdatetimetoint()
 	return(datetoint(now));
 }
 
-
+#endif /* DATATYPEDEFINITIONS_H */

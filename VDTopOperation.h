@@ -1,3 +1,5 @@
+#ifndef VDTOPOPERATION_H
+#define VDTOPOPERATION_H
 
 int vdopen(char *filename,unsigned short mode); //ustedes
 
@@ -16,3 +18,5 @@ int vdseek(int fd, int offset, int whence);
 
 // Borrar un archivo del sistema de archivos
 int vdunlink(char *filename);
+
+#endif /* VDTOPOPERATION_H */

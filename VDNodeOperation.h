@@ -1,3 +1,5 @@
+#ifndef VDNODEOPERATION_H
+#define VDNODEOPERATION_H
 
 // *************************************************************************
 // Para el mapa de bits del área de nodos i
@@ -30,3 +32,5 @@ int unassignblock(int block);
 unsigned short *postoptr(int fd,int pos);
 
 short* currpostoptr(int fd);
+
+#endif /* VDNODEOPERATION_H */
