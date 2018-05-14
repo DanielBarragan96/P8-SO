@@ -15,8 +15,8 @@
 #include "VDLowNode.h"
 #include "vdisk.h"
 
-define MAXLEN 80
-define BUFFERSIZE 512
+#define MAXLEN 80
+#define BUFFERSIZE 512
 
 typedef struct {
 	int year;
