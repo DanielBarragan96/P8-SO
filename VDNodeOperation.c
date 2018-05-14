@@ -16,7 +16,7 @@
 //int mapa_bits_nodos_i = 0;
 //int inodesmap_en_memoria = 0;
 
-// Usando el mapa de bits, determinar si un nodo i, está libre u ocupado.
+// Usando el mapa de bits, determinar si un nodo i, esta libre u ocupado.
 int isinodefree(int inode)
 {
 	int offset=inode/8;
@@ -26,19 +26,18 @@ int isinodefree(int inode)
 	// Checar si el sector de boot de la partición está en memoria
 	if(!secboot_en_memoria)
 	{
-		// Si no está en memoria, cárgalo
+		// Si no esta en memoria, cargarlo
 		result=vdreadseclog(0, 0,(char *) &secboot);
 		secboot_en_memoria=1;
 	}
 	mapa_bits_nodos_i= secboot.sec_inicpart +secboot.sec_res; 	
-//Usamos la información del sector de boot de la partición para 
-						//determinar en que sector inicia el 
-						// mapa de bits de nodos i 
+	//Usamos la información del sector de boot de la partición para 
+	//determinar en que sector inicia el mapa de bits de nodos i 
 					
-	// Ese mapa está en memoria
-	if(!inodesmap_en_memoria)
+	
+	if(!inodesmap_en_memoria)//Verificar si ese mapa está en memoria
 	{
-		// Si no está en memoria, hay que leerlo del disco
+		// Si no, hay que leerlo del disco
 		result=vdreadseclog(0, mapa_bits_nodos_i,inodesmap);
 		inodesmap_en_memoria=1;
 	}
@@ -64,14 +63,12 @@ int nextfreeinode()
 		secboot_en_memoria=1;
 	}
 	mapa_bits_nodos_i= secboot.sec_inicpart +secboot.sec_res; 	
-//Usamos la información del sector de boot de la partición para 
-						//determinar en que sector inicia el 
-						// mapa de bits de nodos i 
+	//Usamos la información del sector de boot de la partición para 
+	//determinar en que sector inicia el mapa de bits de nodos i 
 					
-	// Ese mapa está en memoria
-	if(!inodesmap_en_memoria)
+	if(!inodesmap_en_memoria) //Verificar si ese mapa está en memoria
 	{
-		// Si no está en memoria, hay que leerlo del disco
+		// Si no, hay que leerlo del disco
 		result=vdreadseclog(0,mapa_bits_nodos_i,inodesmap);
 		inodesmap_en_memoria=1;
 	}
@@ -110,14 +107,12 @@ int assigninode(int inode)
 		secboot_en_memoria=1;
 	}
 	mapa_bits_nodos_i= secboot.sec_inicpart +secboot.sec_res; 	
-//Usamos la información del sector de boot de la partición para 
-						//determinar en que sector inicia el 
-						// mapa de bits de nodos i 
+	//Usamos la información del sector de boot de la partición para 
+	//determinar en que sector inicia el mapa de bits de nodos i 
 					
-	// Ese mapa está en memoria
-	if(!inodesmap_en_memoria)
+	if(!inodesmap_en_memoria)//Verificar si ese mapa está en memoria
 	{
-		// Si no está en memoria, hay que leerlo del disco
+		// Si no, hay que leerlo del disco
 		result=vdreadseclog(0, mapa_bits_nodos_i,inodesmap);
 		inodesmap_en_memoria=1;
 	}
@@ -142,19 +137,17 @@ int unassigninode(int inode)
 		secboot_en_memoria=1;
 	}
 	mapa_bits_nodos_i= secboot.sec_inicpart +secboot.sec_res; 	
-//Usamos la información del sector de boot de la partición para 
-						//determinar en que sector inicia el 
-						// mapa de bits de nodos i 
+	//Usamos la información del sector de boot de la partición para 
+	//determinar en que sector inicia el mapa de bits de nodos i 
 					
-	// Ese mapa está en memoria
-	if(!inodesmap_en_memoria)
+	if(!inodesmap_en_memoria)//Verificar si ese mapa está en memoria
 	{
-		// Si no está en memoria, hay que leerlo del disco
+		// Si no, hay que leerlo del disco
 		result=vdreadseclog(0, mapa_bits_nodos_i,inodesmap);
 		inodesmap_en_memoria=1;
 	}
 
-	inodesmap[offset]&=(char) ~(1<<shift); // Poner en cero el bit que corresponde al inodo indicado
+	inodesmap[offset]&=(char) ~(1<<shift); // Poner en cero el bit que corresponde al inodo
 	vdwriteseclog(0, mapa_bits_nodos_i,inodesmap);
 	return(1);
 }
@@ -180,8 +173,7 @@ int isblockfree(int block)
 	// Verificar si ya está en memoria, si no, cargarlo
 	if(!sec_mapa_bits_bloques)
 	{
-		// Cargar todos los sectores que corresponden al 
-		// mapa de bits
+		// Cargar todos los sectores que corresponden al mapa de bits
 		for(i=0;i<secboot.sec_mapa_bits_bloques;i++)
 			result=vdreadseclog(0, sec_mapa_bits_bloques+i,blocksmap+i*512);
 		sec_mapa_bits_bloques=1;
@@ -212,8 +204,7 @@ int nextfreeblock()
 	// Verificar si ya está en memoria, si no, cargarlo
 	if(!sec_mapa_bits_bloques)
 	{
-		// Cargar todos los sectores que corresponden al 
-		// mapa de bits
+		// Cargar todos los sectores que corresponden al mapa de bits
 		for(i=0;i<secboot.sec_mapa_bits_bloques;i++)
 			result=vdreadseclog(0, sec_mapa_bits_bloques+i,blocksmap+i*512);
 		sec_mapa_bits_bloques=1;
@@ -221,13 +212,11 @@ int nextfreeblock()
 
 	// Empezar desde el primer byte del mapa de bloques.
 	i=0;
-	// Si el byte tiene todos los bits en 1, y mientras no
-// lleguemos al final del mapa de bits
+	// Si el byte tiene todos los bits en 1, y mientras no lleguemos al final del mapa de bits
 	while(blocksmap[i]==0xFF && i<secboot.sec_mapa_bits_bloques*512)
 		i++;
 
-	// Si no llegué al final del mapa de bits, quiere decir
-	// que aún hay bloques libres
+	// Si no llegué al final del mapa de bits, quiere decir que aún hay bloques libres
 	if(i<secboot.sec_mapa_bits_bloques*512)
 	{
 		j=0;
@@ -273,14 +262,12 @@ int assignblock(int block)
 
 	blocksmap[offset]|=(1<<shift);
 
-	// Determinar en que número de sector está el bit que 
-	// modificamos 	
+	// Determinar en que número de sector está el bit que modificamos 	
 	sector=(offset/512);
-	// Escribir el sector del mapa de bits donde está el bit
-	// que modificamos
+	// Escribir el sector del mapa de bits donde está el bit que modificamos
 	vdwriteseclog(0, sec_mapa_bits_bloques+sector,blocksmap+sector*512);
 	//for(i=0;i<secboot.sec_mapa_bits_bloques;i++)
-	//	vdwriteseclog(sec_mapa_bits_bloques+i,blocksmap+i*512);
+	//vdwriteseclog(sec_mapa_bits_bloques+i,blocksmap+i*512);
 	return(1);
 }
 
@@ -316,13 +303,12 @@ int unassignblock(int block)
 
 	blocksmap[offset]&=(char) ~(1<<shift);
 
-	// Calcular en que sector está el bit modificado
-	// Escribir el sector en disco
+	// Calcular en que sector está el bit modificado y escribir el sector en disco
 	sector=(offset/512);
 	vdwriteseclog(0, sec_mapa_bits_bloques+sector,blocksmap+sector*512);
 	result = vdwriteseclog(0, sl_datos+block-1, empty);
 	// for(i=0;i<secboot.sec_mapa_bits_bloques;i++)
-	//	vdwriteseclog(sec_mapa_bits_bloques+i,blocksmap+i*512);
+	// vdwriteseclog(sec_mapa_bits_bloques+i,blocksmap+i*512);
 	return(1);
 }
 

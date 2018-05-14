@@ -5,12 +5,6 @@
 #include <unistd.h>
 #include "DataTypeDefinitions.h"
 
-
-// Datos sobre la geometría del disco
-//#define CYLINDERS 200
-//#define HEADS 8
-//#define SECTORS 27
-
 int main()
 {
 	SECBOOTPART sbp = {0};

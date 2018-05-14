@@ -19,8 +19,7 @@ int setninode(int num, char *filename,unsigned short atribs, int uid, int gid)
 //	También vamos a usar el número de sectores que tiene la tabla de nodos-i
 
 
-	// Si la tabla de nodos-i no está en memoria, 
-// hay que cargarla a memoria
+	// Si la tabla de nodos-i no está en memoria,hay que cargarla
 	if(!nodos_i_en_memoria)
 	{
 		for(i=0;i<secboot.sec_tabla_nodos_i;i++)

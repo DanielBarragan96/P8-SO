@@ -17,12 +17,11 @@ int writeblock(int block,char *buffer)
 	int result;
 	int i;
 
-	// Determinar si el sector de boot de la partición está en memoria, si no está en memoria, cargarlo
+	// Determinar si el sector de boot de la partición está en memoria, si no, cargarlo
 	if(!secboot_en_memoria)
 	{
-		// Leer el sector lógico 0, donde está
-// el sector de boot de la partición
-		result=vdreadseclog(0, 0,(char *) &secboot);//**************************************************************************************************check function arguments
+		// Leer el sector lógico 0, donde está el sector de boot de la partición
+		result=vdreadseclog(0, 0,(char *) &secboot);//*****************************************************************************check function arguments
 		secboot_en_memoria=1;
 	}
 
@@ -45,11 +44,10 @@ int readblock(int block,char *buffer)
 	int result;
 	int i;
 
-	// Determinar si el sector de boot de la partición está en memoria, si no está en memoria, cargarlo
+	// Determinar si el sector de boot de la partición está en memoria, si no, cargarlo
 	if(!secboot_en_memoria)
 	{
-		// Leer el sector lógico 0, donde está
-// el sector de boot de la partición
+		// Leer el sector lógico 0, donde está el sector de boot de la partición
 		result=vdreadseclog(0, 0,(char *) &secboot);
 		secboot_en_memoria=1;
 	}

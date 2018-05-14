@@ -13,11 +13,6 @@
 typedef DIR VDDIR;
 typedef struct dirent vddirent;
 
-#define MAXLEN 80
-#define BUFFERSIZE 512
-
-//gcc -o shellvd  shell.c vdisk.o
-
 void locateend(char *linea);
 int executecmd(char *linea);
 int isinvd(char *arg);
@@ -46,7 +41,7 @@ int main()
 
 void locateend(char *linea)
 {
-	// Localiza el fin de la cadena para poner el fin
+	// Localiza el fin de la cadena para poner el caracter de terminacion
 	int i=0;
 	while(i<MAXLEN && linea[i]!='\n')
 		i++;
@@ -60,16 +55,16 @@ int executecmd(char *linea)
 	char *arg2;
 	char *search=" ";
 
-	// Separa el comando y los dos posibles argumentos
+	// Separar el comando y los dos posibles argumentos
 	cmd=strtok(linea," ");
 	arg1=strtok(NULL," ");
 	arg2=strtok(NULL," ");
 
-	// comando "exit"
+	// "exit"
 	if(strcmp(cmd,"exit")==0)
 		return(0);
 
-	// comando "copy"
+	// "copy"
 	if(strcmp(cmd,"copy")==0)
 	{
 		if(arg1==NULL && arg2==NULL)
@@ -92,7 +87,7 @@ int executecmd(char *linea)
 		
 	}
 
-	// comando "type"
+	// "type"
 	if(strcmp(cmd,"type")==0)
 	{
 		if(isinvd(arg1))
@@ -101,7 +96,7 @@ int executecmd(char *linea)
 			catu(arg1);
 	}
 
-	// comando dir
+	// "dir"
 	if(strcmp(cmd,"dir")==0)
 	{
 		if(arg1==NULL)
@@ -111,8 +106,8 @@ int executecmd(char *linea)
 	}
 }
 
-/* Regresa verdadero si el nombre del archivo no comienza con // y por lo 
-   tanto es un archivo que está en el disco virtual */
+/* Regresa 1 si el nombre del archivo no comienza con '//' por lo 
+   tanto es archivo en el disco virtual */
 
 int isinvd(char *arg)
 {
@@ -123,8 +118,8 @@ int isinvd(char *arg)
 }
 
 
-/* Copia un archivo del sistema de archivos de UNIX a un archivo destino
-   en el mismo sistema de archivos de UNIX */
+/* Copia un archivo de UNIX a un archivo destino
+   en el mismo sistema de UNIX */
 
 int copyuu(char *arg1,char *arg2)
 {
@@ -145,8 +140,8 @@ int copyuu(char *arg1,char *arg2)
 
 
 
-/* Copia un archivo del sistema de archivos de UNIX a un archivo destino
-   en el el disco virtual */
+/* Copia un archivo de UNIX a un archivo destino
+   en el disco virtual */
 
 int copyuv(char *arg1,char *arg2)
 {
@@ -167,7 +162,7 @@ int copyuv(char *arg1,char *arg2)
 
 
 /* Copia un archivo del disco virtual a un archivo destino
-   en el sistema de archivos de UNIX */
+   en UNIX */
 
 int copyvu(char *arg1,char *arg2)
 {
@@ -189,7 +184,7 @@ int copyvu(char *arg1,char *arg2)
 
 
 /* Copia un archivo del disco virtual a un archivo destino
-   en el mismo disco virtual */
+   en el disco virtual */
 
 int copyvv(char *arg1,char *arg2)
 {
@@ -209,7 +204,7 @@ int copyvv(char *arg1,char *arg2)
 }
 
 
-/* Despliega un archivo del disco virtual a pantalla */
+/* Lee un archivo del disco virtual a pantalla (terminal tiene que estar abierta) */
 
 int catv(char *arg1)
 {
@@ -220,14 +215,14 @@ int catv(char *arg1)
 	sfile=vdopen(arg1,0);
 	do {
 		ncars=vdread(sfile,buffer,BUFFERSIZE);
-		write(1,buffer,ncars);  // Escribe en el archivo de salida estandard
+		write(1,buffer,ncars);  // Escribe en el archivo de salida en formato estandard
 	} while(ncars==BUFFERSIZE);
 	vdclose(sfile);
 	return(1);		
 }
 
 
-/* Despliega un archivo del sistema de archivos de UNIX a pantalla */
+/* Despliega un archivo de UNIX a pantalla */
 
 int catu(char *arg1)
 {
@@ -238,7 +233,7 @@ int catu(char *arg1)
 	sfile=open(arg1,0);
 	do {
 		ncars=read(sfile,buffer,BUFFERSIZE);
-		write(1,buffer,ncars);  // Escribe en el archivo de salida estandard
+		write(1,buffer,ncars);  // Escribe en el archivo de salida en formato estandard
 	} while(ncars==BUFFERSIZE);
 	close(sfile);
 	return(1);		
@@ -259,7 +254,7 @@ VDDIR* vdreaddir(char* args)
 	return readdir(args);	
 }
 
-/* Muestra el directorio en el sistema de archivosd de UNIX */
+/* Muestra el contenido del directorio de UNIX */
 
 int diru(char *arg1)
 {
@@ -284,7 +279,7 @@ int diru(char *arg1)
 	closedir(dd);	
 }
 
-/* Muestra el directorio en el sistema de archivos en el disco virtual */
+/* Muestra el contenido del directorio en el disco virtual */
 
 int dirv(char *dir)
 {

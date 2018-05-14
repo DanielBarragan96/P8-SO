@@ -1,7 +1,6 @@
 #include "VDSecLogOperation.h"
 
 #include "DataTypeDefinitions.h"
-#include "vdisk.h"
 
 //////////////////////////////////////////////////////
 //													//
